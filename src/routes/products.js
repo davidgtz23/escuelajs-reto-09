@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const ProductService = require('../services');
+const ProductService = require('../services/products');
 const receipt = '../assets/receipt.pdf'
 
 const platziStore = (app) => {
@@ -19,8 +19,14 @@ const platziStore = (app) => {
   });
 
   router.get('/products', async (req, res, next) => {
-    const storeProducts = await productService.getProducts()
-    res.status(200).json(storeProducts);
+	try {
+		const storeProducts = await productService.getProducts();
+		res.status(200).json(storeProducts);
+
+	} catch (err) {
+		next(err);
+	}
+    
   });
 
   router.get('*', (req, res) => {
